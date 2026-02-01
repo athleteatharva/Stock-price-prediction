@@ -1,0 +1,97 @@
+from dash import html, dcc
+import pandas as pd
+
+def create_top_strip():
+    return html.Div([
+        html.Img(src='assets/logo.png', className='logo')
+    ], className='top-strip')
+
+def create_input_form():
+    return html.Div([
+        html.Label("Input stock code", className='label'),
+        dcc.Input(
+            id="stock-code",
+            placeholder="Enter stock code",
+            type="text",
+            value="",
+            className='input'
+        ),
+    ])
+
+def create_date_range():
+    return html.Div([
+        html.Label("Date Range", className='label'),
+        dcc.DatePickerRange(
+            id='date-range',
+            start_date='2020-01-01',
+            end_date=pd.Timestamp.today().strftime('%Y-%m-%d'),
+            className='input'
+        ),
+    ])
+
+def create_action_buttons():
+    return [
+        html.Div([
+            html.Button('Stock Price', id='stock-price', n_clicks=0, className='button'),
+            html.Button('Indicators', id='indicators', n_clicks=0, className='button'),
+        ], className='button-container'),
+        html.Div([
+            html.Button('Number of\nDays', id='number-of-days', n_clicks=0, className='button multiline'),
+            html.Button('Forecast', id='forecast', n_clicks=0, className='button'),
+        ], className='button-container'),
+        html.Button("Submit", id="submit-button", n_clicks=0, className='submit-button')
+    ]
+
+def create_input_page():
+    return html.Div(id='input-page', children=[
+        html.Div([
+            create_input_form(),
+            create_date_range(),
+            *create_action_buttons()
+        ], className='control-box')
+    ], style={'display': 'block'})
+
+def create_results_page():
+    return html.Div(id='results-page', children=[
+        html.Div([
+            html.Button("← Back", id="back-button", n_clicks=0, className='back-button'),
+            html.Div(id='results-content')
+        ], className='results-container')
+    ], style={'display': 'none'})
+
+def create_no_data_message(stock_code, start_date, end_date):
+    return html.Div([
+        html.H2("No Data Found", className='results-title'),
+        html.P(f"No data found for stock code: {stock_code} from {start_date} to {end_date}")
+    ])
+
+def create_insufficient_data_message():
+    return html.Div([
+        html.H2("Insufficient Data", className='results-title'),
+        html.P("Not enough data for SVR model training.")
+    ])
+
+def create_error_message(error):
+    return html.Div([
+        html.H2("Error", className='results-title'),
+        html.P(f"An error occurred: {str(error)}")
+    ])
+
+def create_results_content(stock_code, start_date, end_date, fig_line, fig_candle, results):
+    return html.Div([
+        html.H2("Analysis Results", className='results-title'),
+        html.Div([
+            html.P(f"Stock Code: {stock_code}", className='stock-info'),
+            html.P(f"Date Range: {start_date} to {end_date}", className='date-range'),
+            dcc.Graph(figure=fig_line),
+            dcc.Graph(figure=fig_candle),
+            html.Div([
+                html.H3("Historical Data (First 5 rows):", className='section-title'),
+                html.Pre(results[['Date', 'Close']].head().to_string(), className='data-table')
+            ]),
+            html.Div([
+                html.H3("Predicted Values (First 5 rows):", className='section-title'),
+                html.Pre(results[['Date', 'Predicted']].head().to_string(), className='data-table')
+            ])
+        ])
+    ])
