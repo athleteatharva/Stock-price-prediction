@@ -1,0 +1,67 @@
+/* CSS for the stock app */
+
+/* General layout */
+.container {
+    width: 90%;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+}
+
+/* Navigation section */
+.nav {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.stock-input, .date-input, .selectors {
+    margin-bottom: 10px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Content section */
+.content {
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+}
+
+.header {
+    text-align: center;
+}
+
+.logo {
+    max-width: 100px;
+}
+
+.company-name {
+    font-size: 2em;
+    color: #333;
+}
+
+h1 {
+    color: #333;
+}
+
+p {
+    color: #555;
+}
+
+.date-picker {
+    display: flex;
+    justify-content: space-around;
+    padding: 5px;
+}
